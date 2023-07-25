@@ -1,6 +1,7 @@
 import pygame
 import time
 from copy import deepcopy
+import sys
 
 
 def position_searcher(position: list, table_list: list) -> bool:
@@ -137,7 +138,7 @@ def next_step(table_list: list) -> list:
             target_step = next_step
         else:
             target_step = empty_space(table_list)
-    return target_step            
+    return target_step           
 
 def visualisation():
     pygame.init()
@@ -148,18 +149,44 @@ def visualisation():
     field_size = table_size // 3
 
     table = pygame.display.set_mode((table_size, table_size))
+    pygame.display.set_caption("PvP vs. PvC")
+    font = pygame.font.Font(None, 36)
+    button_width, button_height = 150, 50
+
+    def draw_button(x, y, text):
+        pygame.draw.rect(table,"GRAY",(x,y,button_width, button_height))
+        text_surface = font.render(text, True, "black")
+        text_rect = text_surface.get_rect(center=(x + button_width // 2, y + button_height // 2))
+        table.blit(text_surface, text_rect)
+
+    pvp = -1
+
+    while pvp == -1:
+        table.fill("white")
+        draw_button(50, 70, "P vs. P")
+        draw_button(400, 70, "P vs. C")
+        pygame.display.flip()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = pygame.mouse.get_pos()
+                if 50 <= x <= 50 + button_width and 70 <= y <= 70 + button_height:
+                    pvp = 1
+                elif 400 <= x <= 400 + button_width and 70 <= y <= 70 + button_height:
+                    pvp = 0
 
     table_list = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
     xoro = 1  # x or o
     win = 0
-    pvp = 0
 
     while True:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                return
+                sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 click_location = event.dict["pos"]
                 [x, y] = click_location
@@ -205,10 +232,12 @@ def visualisation():
             pygame.display.flip()
             time.sleep(2)
             pygame.quit()
+            sys.exit()
 
         pygame.display.flip()
 
-    pygame.quit()
+def main():
+    visualisation()
 
-
-visualisation()
+if __name__ == "__main__":
+    main()
