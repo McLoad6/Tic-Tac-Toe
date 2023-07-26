@@ -149,12 +149,12 @@ def visualisation():
     field_size = table_size // 3
 
     table = pygame.display.set_mode((table_size, table_size))
-    pygame.display.set_caption("PvP vs. PvC")
+    pygame.display.set_caption("Tic-Tac-Toe")
     font = pygame.font.Font(None, 36)
     button_width, button_height = 150, 50
 
     def draw_button(x, y, text):
-        pygame.draw.rect(table,"GRAY",(x,y,button_width, button_height))
+        pygame.draw.rect(table,"saddle brown",(x,y,button_width, button_height))
         text_surface = font.render(text, True, "black")
         text_rect = text_surface.get_rect(center=(x + button_width // 2, y + button_height // 2))
         table.blit(text_surface, text_rect)
@@ -162,7 +162,7 @@ def visualisation():
     pvp = -1
 
     while pvp == -1:
-        table.fill("white")
+        table.fill("burlywood1")
         draw_button(50, 70, "P vs. P")
         draw_button(400, 70, "P vs. C")
         pygame.display.flip()
@@ -177,6 +177,7 @@ def visualisation():
                 elif 400 <= x <= 400 + button_width and 70 <= y <= 70 + button_height:
                     pvp = 0
 
+    time.sleep(0.3)
     table_list = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
     xoro = 1  # x or o
     win = 0
@@ -229,6 +230,12 @@ def visualisation():
         if win == 1:
             [[x1, y1], [x2, y2]] = win_line
             pygame.draw.line(table, "red", (x1, y1), (x2, y2), 20)
+            pygame.display.flip()
+            time.sleep(2)
+            pygame.quit()
+            sys.exit()
+
+        if empty_space(table_list) == False:
             pygame.display.flip()
             time.sleep(2)
             pygame.quit()
